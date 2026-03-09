@@ -1,9 +1,9 @@
-#!\bin\bash
+#!/bin/bash
 
 LOGS_FOLDER="var/log/expense"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME-TIMESTAMP
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME-TIMESTAMP.log"
 mkdir -p LOGS_FOLDER
 
 USER_ID=$(id -u)
@@ -56,30 +56,30 @@ fi
 mkdir -p /app
 VALIDATE $? "Creating /app folder"
 
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>LOG_FILE
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOG_FILE
 VALIDATE $? "Downloading backend application code"
 
 cd /app
 rm -rf /app/*
-unzip /tmp/backend.zip &>>LOG_FILE
+unzip /tmp/backend.zip &>>$LOG_FILE
 VALIDATE $? "Extracting backend application code"
 
-npm install &>>LOG_FILE
+npm install &>>$LOG_FILE
 cp /home/ec2-user/expense-shell/backend.service /etc/systemd/system/backend.service
 
-dnf install mysql -y &>>LOG_FILE
+dnf install mysql -y &>>$LOG_FILE
 VALIDATE $? "Installing MySQL client"
 
-mysql -h mysql.naveenkadari.com -uroot -pExpenseAPP@1 < /app/schema/backend.sql &>>LOG_FILE
+mysql -h mysql.naveenkadari.com -uroot -pExpenseAPP@1 < /app/schema/backend.sql &>>$LOG_FILE
 VALIDATE $? "Schema loading"
 
-systemctl daemon-reload &>>LOG_FILE
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Schema loading"
 
-systemctl enable backend &>>LOG_FILE
+systemctl enable backend &>>$LOG_FILE
 VALIDATE $? "Enabled backend"
 
-systemctl restart backend &>>LOG_FILE
+systemctl restart backend &>>$LOG_FILE
 VALIDATE $? "restart backend"
 
 
