@@ -14,7 +14,7 @@ Y="\e[33m"
 N="\e[0m"
 
 CHECK_ROOT(){
-    if [ $USEID -ne 0 ]
+    if [ $USERID -ne 0 ]
     then
         echo -e "Please run this script with root privileges" &>>LOG_FOLDER
         exit 1
