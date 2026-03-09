@@ -6,7 +6,7 @@ TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME-$TIMESTAMP.log
 mkdir -p $LOGS_FOLDER  #-p it checks whether the LOGS_FOLDER is created or not, if not it will create
 
-USERID=$(id-u)
+USERID=$(id -u)
 
 R="\e[31m"
 G="\e[32m"
